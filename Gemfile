@@ -49,3 +49,5 @@ gem "openssl", "~> 2.2"
 gem "httparty", "~> 0.18.1"
 
 gem "figaro", "~> 1.2"
+
+gem "active_model_serializers", "~> 0.10.10"
