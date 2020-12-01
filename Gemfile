@@ -47,3 +47,5 @@ gem "net", "~> 0.3.3"
 gem "openssl", "~> 2.2"
 
 gem "httparty", "~> 0.18.1"
+
+gem "figaro", "~> 1.2"

@@ -10,15 +10,16 @@
 require "uri"
 require "net/http"
 require "openssl"
+require_relative "../keys.rb"
 
-url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=80&start=184")
+url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=80&start=200")
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 request = Net::HTTP::Get.new(url)
-request["x-rapidapi-key"] = ""
+request["x-rapidapi-key"] = YUMMLY_API_KEY
 request["x-rapidapi-host"] = "yummly2.p.rapidapi.com"
 
 response = http.request(request)
