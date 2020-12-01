@@ -18,7 +18,7 @@ http.use_ssl = true
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 request = Net::HTTP::Get.new(url)
-request["x-rapidapi-key"] = "820e9fc104msh7ef0c9fbe2396e0p15de03jsn291d6205ea34"
+request["x-rapidapi-key"] = ""
 request["x-rapidapi-host"] = "yummly2.p.rapidapi.com"
 
 response = http.request(request)
