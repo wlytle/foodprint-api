@@ -5,6 +5,8 @@ class CreateRecipes < ActiveRecord::Migration[6.0]
       t.string :instructions
       t.string :yield
       t.string :category
+      t.boolean :public
+      t.string :image
 
       t.timestamps
     end

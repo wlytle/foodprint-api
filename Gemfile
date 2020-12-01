@@ -39,3 +39,11 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem "uri", "~> 0.10.0"
+
+gem "net", "~> 0.3.3"
+
+gem "openssl", "~> 2.2"
+
+gem "httparty", "~> 0.18.1"
