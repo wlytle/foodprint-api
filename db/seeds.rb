@@ -115,7 +115,7 @@
 #     "Retail": 0,
 #   },
 #   {
-#     "Product": "Cane Sugar",
+#     "Product": "Sugar, Cane",
 #     "land_use_change": 1.2,
 #     "animal_feed": 0,
 #     "Farm": 0.5,
@@ -125,7 +125,7 @@
 #     "Retail": 0,
 #   },
 #   {
-#     "Product": "Beet Sugar",
+#     "Product": "Sugar, Beet",
 #     "land_use_change": 0,
 #     "animal_feed": 0,
 #     "Farm": 0.5,
