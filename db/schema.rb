@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_185724) do
+ActiveRecord::Schema.define(version: 2020_12_02_151417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,12 +56,13 @@ ActiveRecord::Schema.define(version: 2020_12_01_185724) do
   end
 
   create_table "recipe_ingredients", force: :cascade do |t|
-    t.integer "quantity"
     t.string "unit"
     t.bigint "recipe_id", null: false
     t.bigint "ingredient_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "quantity", precision: 10, scale: 2
+    t.string "whole_line"
     t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
     t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
   end
@@ -69,12 +70,12 @@ ActiveRecord::Schema.define(version: 2020_12_01_185724) do
   create_table "recipes", force: :cascade do |t|
     t.string "title"
     t.string "instructions"
-    t.string "yield"
     t.string "category"
     t.boolean "public"
     t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "yield"
   end
 
   create_table "user_recipes", force: :cascade do |t|
@@ -87,9 +88,11 @@ ActiveRecord::Schema.define(version: 2020_12_01_185724) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "username"
+    t.string "password"
+    t.string "password_digest"
   end
 
   create_table "water_uses", force: :cascade do |t|

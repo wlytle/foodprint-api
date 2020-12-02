@@ -10,9 +10,8 @@
 require "uri"
 require "net/http"
 require "openssl"
-require_relative "../keys.rb"
 
-url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=80&start=200")
+url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=18&start=0&tag=list.recipe.popular")
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
@@ -39,6 +38,6 @@ recipes["feed"].each do |recipe|
     ing.ingredient_type_id = ingredient_type.id
     ing.save
 
-    r.recipe_ingredients.create(quantity: ingredient["quantity"], unit: ingredient["unit"], ingredient: ing)
+    r.recipe_ingredients.create(quantity: ingredient["quantity"], whole_line: ingredient["wholeLine"], unit: ingredient["unit"], ingredient: ing)
   end
 end
