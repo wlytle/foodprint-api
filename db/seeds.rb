@@ -6,42 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# Use Yummly api to seed public recipe database
-# require "uri"
-# require "net/http"
-# require "openssl"
-
-# url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=18&start=0&tag=list.recipe.popular")
-
-# http = Net::HTTP.new(url.host, url.port)
-# http.use_ssl = true
-# http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-# request = Net::HTTP::Get.new(url)
-# request["x-rapidapi-key"] = YUMMLY_API_KEY
-# request["x-rapidapi-host"] = "yummly2.p.rapidapi.com"
-
-# response = http.request(request)
-# recipes = JSON.parse(response.body)
-
-# recipes["feed"].each do |recipe|
-#   #Deal with no instructions recipe
-#   return unless recipe["content"]["preparationSteps"] && recipe["content"]["details"]["keywords"][0] && recipe["content"]["details"]["numberOfServings"] && recipe["display"]["displayName"] && recipe["display"]["images"][0]
-#   #Create new recipe
-#   r = Recipe.create(title: recipe["display"]["displayName"], image: recipe["display"]["images"][0], instructions: recipe["content"]["preparationSteps"].join(" "), category: recipe["content"]["details"]["keywords"][0], yield: recipe["content"]["details"]["numberOfServings"], public: true)
-
-#   #Create new ingredients and recipe ingredients properly associated
-#   recipe["content"]["ingredientLines"].each do |ingredient|
-#     ing = Ingredient.find_or_create_by(name: ingredient["ingredient"])
-
-#     ingredient_type = IngredientType.find_or_create_by(name: ingredient["category"])
-#     ing.ingredient_type_id = ingredient_type.id
-#     ing.save
-
-#     r.recipe_ingredients.create(quantity: ingredient["quantity"], whole_line: ingredient["wholeLine"], unit: ingredient["unit"], ingredient: ing)
-#   end
-# end
-
 #### Seed emissions tables
 # ghg = [
 #   {
@@ -488,10 +452,10 @@
 #     "Barley": 17.1,
 #     "Beef (beef herd)": 1451.2,
 #     "Beef (dairy herd)": 2714.3,
-#     "Beet Sugar": 217.7,
+#     "Sugar, Beet": 217.7,
 #     "Berries & Grapes": 419.6,
 #     "Brassicas": 119.4,
-#     "Cane Sugar": 620.1,
+#     "Sugar, Cane": 620.1,
 #     "Cassava": 0,
 #     "Cheese": 5605.2,
 #     "Citrus Fruit": 82.7,
@@ -540,10 +504,10 @@
 #   "Barley": 2.33,
 #   "Beef (beef herd)": 301.41,
 #   "Beef (dairy herd)": 365.29,
-#   "Beet Sugar": 5.41,
+#   "Sugar, Beet": 5.41,
 #   "Berries & Grapes": 6.12,
 #   "Brassicas": 5.01,
-#   "Cane Sugar": 16.92,
+#   "sugar, Cane": 16.92,
 #   "Cassava": 0.69,
 #   "Cheese": 98.37,
 #   "Citrus Fruit": 2.24,
@@ -583,3 +547,45 @@
 # eut.each do |k, v|
 #   Eutrophication.create(product: k, eutrophication: eut[k])
 # end
+
+#Use Yummly api to seed public recipe database
+require "uri"
+require "net/http"
+require "openssl"
+
+url = URI("https://yummly2.p.rapidapi.com/feeds/list?limit=18&start=0&tag=list.recipe.popular")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["x-rapidapi-key"] = YUMMLY_API_KEY
+request["x-rapidapi-host"] = "yummly2.p.rapidapi.com"
+
+response = http.request(request)
+recipes = JSON.parse(response.body)
+
+recipes["feed"].each do |recipe|
+  #Deal with no instructions recipe
+  return unless recipe["content"]["preparationSteps"] && recipe["content"]["details"]["keywords"][0] && recipe["content"]["details"]["numberOfServings"] && recipe["display"]["displayName"] && recipe["display"]["images"][0]
+  #Create new recipe
+  r = Recipe.create(title: recipe["display"]["displayName"], image: recipe["display"]["images"][0], instructions: recipe["content"]["preparationSteps"].join(" "), category: recipe["content"]["details"]["keywords"][0], yield: recipe["content"]["details"]["numberOfServings"], public: true)
+
+  #Create new ingredients and recipe ingredients properly associated
+  recipe["content"]["ingredientLines"].each do |ingredient|
+    ing = Ingredient.find_or_create_by(name: ingredient["ingredient"])
+
+    ingredient_type = IngredientType.find_or_create_by(name: ingredient["category"])
+    ing.ingredient_type_id = ingredient_type.id
+
+    unless ing.greenhouse_gass
+      ing.find_ghg_product
+      ing.find_water_product
+      ing.find_eut_product
+      ing.save
+    end
+
+    r.recipe_ingredients.create(quantity: ingredient["quantity"], whole_line: ingredient["wholeLine"], unit: ingredient["unit"], ingredient: ing)
+  end
+end
