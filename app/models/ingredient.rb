@@ -8,6 +8,7 @@ class Ingredient < ApplicationRecord
 
   #associate ingredients with emiisions data categories
   def find_ghg_product
+
     #make name an array containg only alpha chars
     name = self.name.downcase.gsub(/[^a-z\s]/, "").split(" ")
     GreenhouseGass.all.each do |ghg|
@@ -149,7 +150,7 @@ class Ingredient < ApplicationRecord
   def find_water_product
     return unless self.greenhouse_gass&.product
     product = self.greenhouse_gass.product
-    self.water_use = WaterUse.find_by(product: product.gsub(/\(.*\)/, "").strip)
+    self.water_use = WaterUse.find_by(product: product.gsub(/\(.*\)/, "").strip) || WaterUse.find_by(product: product)
     self.save
   end
 
@@ -157,7 +158,7 @@ class Ingredient < ApplicationRecord
   def find_eut_product
     return unless self.greenhouse_gass&.product
     product = self.greenhouse_gass.product
-    self.eutrophication = Eutrophication.find_by(product: product.gsub(/\(.*\)/, "").strip)
+    self.eutrophication = Eutrophication.find_by(product: product.gsub(/\(.*\)/, "").strip) || Eutrophication.find_by(product: product)
     self.save
   end
 end
