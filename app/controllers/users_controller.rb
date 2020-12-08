@@ -10,21 +10,4 @@ class UsersController < ApplicationController
     else
     end
   end
-
-  #   def update
-  #     if @professor.update(professor_params)
-  #       redirect_to @professor
-  #     else
-  #       @subjects = Subject.all
-  #       render :edit
-  #     end
-  #   end
-
-  #   def destroy
-  #     @professor.destroy
-  #     session.delete :user_id
-  #     session.delete :user_type
-  #     flash[:message] = "You have self destructed."
-  #     redirect_to welcome_path
-  #   end
 end

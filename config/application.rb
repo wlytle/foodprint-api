@@ -23,6 +23,9 @@ module FoodprintApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    ## Allow cookies
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_namespace_key"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -34,19 +37,18 @@ module FoodprintApi
     # Skip views, helpers and assets when generating a new resource.
 
     ## Allow CORS
+    # ....
+
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "*"
+        origins "localhost:8080"
         resource "*",
           :headers => :any,
+          :credentials => true,
           :methods => [:get, :post, :delete, :put, :patch, :options, :head],
           :max_age => 0
       end
     end
-
-    ## Allow cookies
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: "_namespace_key"
 
     config.api_only = true
   end

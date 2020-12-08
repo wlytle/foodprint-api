@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_06_230853) do
+ActiveRecord::Schema.define(version: 2020_12_07_211348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,10 +48,8 @@ ActiveRecord::Schema.define(version: 2020_12_06_230853) do
     t.bigint "eutrophication_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "ingredient_type_id"
     t.index ["eutrophication_id"], name: "index_ingredients_on_eutrophication_id"
     t.index ["greenhouse_gass_id"], name: "index_ingredients_on_greenhouse_gass_id"
-    t.index ["ingredient_type_id"], name: "index_ingredients_on_ingredient_type_id"
     t.index ["water_use_id"], name: "index_ingredients_on_water_use_id"
   end
 
@@ -63,7 +61,9 @@ ActiveRecord::Schema.define(version: 2020_12_06_230853) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "quantity", precision: 10, scale: 2
     t.string "whole_line"
+    t.bigint "ingredient_type_id"
     t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
+    t.index ["ingredient_type_id"], name: "index_recipe_ingredients_on_ingredient_type_id"
     t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
   end
 
@@ -103,8 +103,8 @@ ActiveRecord::Schema.define(version: 2020_12_06_230853) do
 
   add_foreign_key "ingredients", "eutrophications"
   add_foreign_key "ingredients", "greenhouse_gasses"
-  add_foreign_key "ingredients", "ingredient_types"
   add_foreign_key "ingredients", "water_uses"
+  add_foreign_key "recipe_ingredients", "ingredient_types"
   add_foreign_key "recipe_ingredients", "ingredients"
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "user_recipes", "recipes"

@@ -2,7 +2,7 @@ class Ingredient < ApplicationRecord
   belongs_to :greenhouse_gass, optional: true
   belongs_to :water_use, optional: true
   belongs_to :eutrophication, optional: true
-  belongs_to :ingredient_type, optional: true
+  # belongs_to :ingredient_type, optional: true
   has_many :recipe_ingredients, dependent: :destroy
   has_many :recipes, through: :recipe_ingredients
 
@@ -125,7 +125,7 @@ class Ingredient < ApplicationRecord
           self.greenhouse_gass = GreenhouseGass.find_by(product: "Poultry Meat")
           self.save
           return
-        elsif na.match?("egg")
+        elsif na.match?("egg") || na.match?("mayonnaise") || na.match?("mayo")
           self.greenhouse_gass = GreenhouseGass.find_by(product: "Eggs")
           self.save
           return
@@ -134,7 +134,7 @@ class Ingredient < ApplicationRecord
           self.save
           return
         elsif na.match?("shrimp") || na.match?("prawn")
-          self.greenhouse_gass = GreenhouseGass.find_by(product: "Shrimps (farmed)")
+          self.greenhouse_gass = GreenhouseGass.find_by(product: "Prawns (farmed)")
           self.save
           return
         elsif ghg.product.downcase.gsub(/[^a-z\s]/, "").split(" ").include?(na)
