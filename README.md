@@ -129,3 +129,7 @@ This API responds to the following endpoints with  the following data
 * `PATCH /recipes/:id` This route takes and returns the smae data structures as above and updates the recipe corresponding to `:id` with the data provided.
 
 * ` DELETE /recipes/:id` This route will delete the recipe corrsponding to `:id`
+
+### Data
+ Data used in this project from: Hannah Ritchie (2020) - "Environmental impacts of food production". Published online at OurWorldInData.org. Retrieved from: 
+     'https://ourworldindata.org/environmental-impacts-of-food' [Online Resource] 
