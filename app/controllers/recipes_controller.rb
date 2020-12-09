@@ -14,14 +14,9 @@ class RecipesController < ApplicationController
     recipe = Recipe.new(recipe_params)
 
     params[:ingredients].each do |ing|
-      ingredient = Ingredient.find_or_create_by(name: ing[:ingredient])
-      ingredient.find_ghg_product
-      ingredient.find_water_product
-      ingredient.find_eut_product
+      handle_ingredients(ing)
 
-      ingredient_type = IngredientType.find_or_create_by(name: ing[:ingredient_type])
-
-      recipe.recipe_ingredients.build(ingredient: ingredient, ingredient_type: ingredient_type, unit: ing[:unit])
+      recipe.recipe_ingredients.build(ingredient: @ingredient, ingredient_type: @ingredient_type, unit: ing[:unit], quantity: ing[:quantity])
     end
 
     recipe.recipe_ingredients.each { |ri| ri.make_whole_line }
@@ -34,18 +29,15 @@ class RecipesController < ApplicationController
 
   def update
     params[:ingredients].each do |ing|
-      ingredient = Ingredient.find_or_create_by(name: ing[:ingredient])
-      ingredient.find_ghg_product
-      ingredient.find_water_product
-      ingredient.find_eut_product
+      handle_ingredients(ing)
 
-      ingredient_type = IngredientType.find_or_create_by(name: ing[:ingredient_type])
-
-      RecipeIngredient.update_or_create_by({ ingredient: ingredient, recipe: @recipe }, { unit: ing[:unit], ingredient_type: ingredient_type, quantity: ing[:quantity] })
+      RecipeIngredient.update_or_create_by({ ingredient: @ingredient, recipe: @recipe }, { unit: ing[:unit], ingredient_type: @ingredient_type, quantity: ing[:quantity] })
     end
+
     #First get all inout ingrdients
     new_ing = []
     params[:ingredients].each { |i| new_ing << i[:ingredient] }
+
     #remove ingredients that aren't present anymore
     @recipe.ingredients.each do |all_ing|
       unless new_ing.include?(all_ing[:name])
@@ -65,6 +57,16 @@ class RecipesController < ApplicationController
   end
 
   private
+
+  # assigns climate data and ingredient types for ingredient data
+  def handle_ingredients(ing)
+    @ingredient = Ingredient.find_or_create_by(name: ing[:ingredient])
+    @ingredient.find_ghg_product
+    @ingredient.find_water_product
+    @ingredient.find_eut_product
+
+    @ingredient_type = IngredientType.find_or_create_by(name: ing[:ingredient_type])
+  end
 
   def get_recipe
     @recipe = Recipe.find(params[:id])
