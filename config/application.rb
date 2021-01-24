@@ -39,16 +39,16 @@ module FoodprintApi
     ## Allow CORS
     # ....
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "localhost:8080"
-        resource "*",
-          :headers => :any,
-          :credentials => true,
-          :methods => [:get, :post, :delete, :put, :patch, :options, :head],
-          :max_age => 0
-      end
-    end
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origins "localhost:8080"
+    #     resource "*",
+    #       :headers => :any,
+    #       :credentials => true,
+    #       :methods => [:get, :post, :delete, :put, :patch, :options, :head],
+    #       :max_age => 0
+    #   end
+    # end
 
     config.api_only = true
   end
