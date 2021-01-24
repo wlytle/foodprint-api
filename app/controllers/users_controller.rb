@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  def show
-    @conclaves = @professor.conclaves
+  def index
+    current_user
+    render json: @current_user.to_json(only: [:id, :username])
   end
 
   def create
